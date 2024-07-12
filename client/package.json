@@ -1,0 +1,23 @@
+{
+  "name": "@stelis-dnd/client",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@stelis-dnd/server": "^1.0.0",
+    "@types/node": "^20.14.10",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.1"
+  },
+  "dependencies": {
+    "@trpc/client": "^10.45.2",
+    "superjson": "^2.2.1"
+  }
+}
