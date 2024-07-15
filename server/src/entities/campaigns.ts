@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { Selectable } from 'kysely';
 import type { Campaigns } from '@server/database/types';
-import { idSchema } from './shared';
+import { createdAtSchema, idSchema } from './shared';
 
 export const campaignSchema = z.object({
   id: idSchema,
@@ -9,6 +9,7 @@ export const campaignSchema = z.object({
     .string()
     .min(3, 'Campaign name must be at least 3 characters long')
     .max(30, 'Campaign name must be at most 30 characters long'),
+  createdAt: createdAtSchema,
 });
 
 export const campaignKeysAll = Object.keys(

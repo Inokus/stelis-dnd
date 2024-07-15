@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { Selectable } from 'kysely';
 import type { Downtimes } from '@server/database/types';
-import { idSchema } from './shared';
+import { createdAtSchema, idSchema } from './shared';
 
 export const downtimeSchema = z.object({
   id: idSchema,
@@ -12,7 +12,7 @@ export const downtimeSchema = z.object({
     .min(3, 'Downtime description must be at least 3 character long')
     .max(500, 'Downtime description must be at most 500 characters long'),
   characterId: idSchema,
-  createdAt: z.date().default(() => new Date()),
+  createdAt: createdAtSchema,
 });
 
 export const downtimeKeysAll = Object.keys(

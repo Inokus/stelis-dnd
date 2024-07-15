@@ -1,4 +1,4 @@
-import type { Kysely } from 'kysely';
+import { type Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>) {
   await db.schema
@@ -7,6 +7,9 @@ export async function up(db: Kysely<any>) {
       c.primaryKey().generatedAlwaysAsIdentity()
     )
     .addColumn('name', 'text', (c) => c.unique().notNull())
+    .addColumn('created_at', 'timestamptz', (column) =>
+      column.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
     .execute();
 }
 

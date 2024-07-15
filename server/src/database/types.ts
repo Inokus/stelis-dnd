@@ -8,12 +8,14 @@ export type Generated<T> =
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface Campaigns {
+  createdAt: Generated<Timestamp>;
   id: Generated<number>;
   name: string;
 }
 
 export interface Characters {
   campaignId: number;
+  createdAt: Generated<Timestamp>;
   downtime: Generated<number>;
   id: Generated<number>;
   name: string;
@@ -61,11 +63,11 @@ export interface Transactions {
 }
 
 export interface Users {
+  createdAt: Generated<Timestamp>;
   email: string;
   id: Generated<number>;
   isAdmin: Generated<boolean>;
   password: string;
-  salt: string;
   username: string;
 }
 

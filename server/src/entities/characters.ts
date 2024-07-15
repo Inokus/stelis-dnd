@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { Selectable } from 'kysely';
 import type { Characters } from '@server/database/types';
-import { idSchema } from './shared';
+import { createdAtSchema, idSchema } from './shared';
 
 export const characterSchema = z.object({
   id: idSchema,
@@ -12,6 +12,7 @@ export const characterSchema = z.object({
   downtime: z.number().int().nonnegative(),
   userId: idSchema,
   campaignId: idSchema,
+  createdAt: createdAtSchema,
 });
 
 export const characterKeysAll = Object.keys(
