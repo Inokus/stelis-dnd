@@ -1,7 +1,7 @@
 import { createTestDatabase } from '@server/tests/utils/database';
 import { fakeUser } from '@server/tests/utils/fakes';
 import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll, selectAll } from '@server/tests/utils/records';
+import { insertAll } from '@server/tests/utils/records';
 import { pick } from 'lodash-es';
 import { userKeysPublic } from '@server/entities/users';
 import { usersRepository } from '../usersRepository';
@@ -27,11 +27,11 @@ describe('create', () => {
 describe('findByUsername', () => {
   it('should find user by username', async () => {
     const users = await insertAll(db, 'users', [
-      fakeUser({ username: 'testUsername' }),
+      fakeUser({ username: 'bob' }),
       fakeUser(),
     ]);
 
-    const foundUser = await repository.findByUsername('testUsername');
+    const foundUser = await repository.findByUsername('bob');
 
     expect(foundUser).toEqual(users[0]);
   });

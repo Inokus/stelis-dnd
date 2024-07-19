@@ -31,6 +31,26 @@ it('should save a user', async () => {
   });
 });
 
+it('should require a username with at least 3 characters', async () => {
+  await expect(
+    signup(
+      fakeUser({
+        username: 'bo',
+      })
+    )
+  ).rejects.toThrow(/username/i); // throws out some error complaining about "username"
+});
+
+it('should require a username without special characters', async () => {
+  await expect(
+    signup(
+      fakeUser({
+        username: '#bo',
+      })
+    )
+  ).rejects.toThrow(/username/i); // throws out some error complaining about "username"
+});
+
 it('should require a valid email', async () => {
   await expect(
     signup(
@@ -61,6 +81,22 @@ it('throws an error for invalid email', async () => {
   ).rejects.toThrow(/email/);
 });
 
+it('stores lowercased username', async () => {
+  const user = fakeUser();
+
+  await signup({
+    ...user,
+    username: user.username.toUpperCase(),
+  });
+
+  // get user with original lowercase username
+  const userSaved = await selectAll(db, 'users', (eb) =>
+    eb('username', '=', user.username)
+  );
+
+  expect(userSaved).toHaveLength(1);
+});
+
 it('stores lowercased email', async () => {
   const user = fakeUser();
 
@@ -89,6 +125,18 @@ it('stores email with trimmed whitespace', async () => {
   );
 
   expect(userSaved).toHaveLength(1);
+});
+
+it('throws an error for duplicate username', async () => {
+  const username = random.first();
+
+  // signup once
+  await signup(fakeUser({ username }));
+
+  // expect that the second signup will throw an error
+  await expect(signup(fakeUser({ username }))).rejects.toThrow(
+    /username already exists/i
+  );
 });
 
 it('throws an error for duplicate email', async () => {

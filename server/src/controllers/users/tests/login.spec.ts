@@ -39,7 +39,7 @@ it('should throw an error for non-existant user', async () => {
 });
 
 it('should throw an error for incorrect password', async () => {
-  expect(
+  await expect(
     login({
       username: userSeed.username,
       password: 'password.123!',
