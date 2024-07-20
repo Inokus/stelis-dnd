@@ -1,4 +1,4 @@
-import { fakeAuthUser } from '@server/tests/utils/fakes';
+import { fakeAuthUser, fakeAdminUser } from '@server/tests/utils/fakes';
 import { authUserSchema, type AuthUser } from '@server/entities/users';
 import type { Context, ContextMinimal } from '@server/trpc';
 
@@ -32,4 +32,12 @@ export const authRepoContext = (
     db: {} as any,
     repos,
   }),
+});
+
+export const adminContext = (
+  context: Partial<Context> & ContextMinimal,
+  user: AuthUser = fakeAdminUser()
+): Context => ({
+  authUser: authUserSchema.parse(user),
+  ...context,
 });
