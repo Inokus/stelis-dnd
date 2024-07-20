@@ -124,6 +124,7 @@ export const fakeItem = <T extends Partial<Insertable<Items>>>(
     name: generateItemName(),
     description: random.paragraph(),
     value: random.integer({ min: 1, max: 5000 }),
+    isCurrency: false,
     ...overrides,
   }) satisfies Insertable<Items>;
 
