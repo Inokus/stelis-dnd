@@ -1,8 +1,12 @@
 import { router } from '@server/trpc';
 import create from './create';
-import getAll from './getAll';
+import getAvailable from './getAvailable';
+import update from './update';
+import remove from './remove';
 
 export default router({
   create,
-  getAll,
+  getAvailable,
+  update,
+  remove,
 });

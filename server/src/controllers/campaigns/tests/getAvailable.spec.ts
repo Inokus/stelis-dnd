@@ -1,4 +1,8 @@
-import { authContext, requestContext } from '@server/tests/utils/context';
+import {
+  authContext,
+  adminContext,
+  requestContext,
+} from '@server/tests/utils/context';
 import {
   fakeCampaign,
   fakeCharacter,
@@ -48,6 +52,16 @@ it('should return a list of campaigns that user has characters in', async () => 
 
   expect(campaigns).toHaveLength(1);
   expect(campaigns[0]).toMatchObject(campaignTwo);
+});
+
+it('should return all campaigns if user is admin', async () => {
+  const { getAvailable } = createCaller(adminContext({ db }));
+
+  await insertAll(db, 'campaigns', [fakeCampaign(), fakeCampaign()]);
+
+  const campaigns = await getAvailable();
+
+  expect(campaigns).toHaveLength(2);
 });
 
 it('should return campaigns in alphabetical order', async () => {

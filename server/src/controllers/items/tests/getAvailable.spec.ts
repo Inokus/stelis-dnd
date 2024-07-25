@@ -1,0 +1,69 @@
+import { authContext, requestContext } from '@server/tests/utils/context';
+import {
+  fakeCampaign,
+  fakeItem,
+  fakeRestrictedItem,
+} from '@server/tests/utils/fakes';
+import { createTestDatabase } from '@server/tests/utils/database';
+import { createCallerFactory } from '@server/trpc';
+import { wrapInRollbacks } from '@server/tests/utils/transactions';
+import { clearTables, insertAll } from '@server/tests/utils/records';
+import itemsRouter from '..';
+
+const createCaller = createCallerFactory(itemsRouter);
+const db = await wrapInRollbacks(createTestDatabase());
+
+await clearTables(db, ['items']);
+
+it('should throw an error if user is not authenticated', async () => {
+  const { getAvailable } = createCaller(requestContext({ db }));
+  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
+
+  await expect(getAvailable(campaign.id)).rejects.toThrow(/unauthenticated/i);
+});
+
+it('should return an empty list, if there are no items', async () => {
+  const { getAvailable } = createCaller(authContext({ db }));
+  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
+
+  expect(await getAvailable(campaign.id)).toHaveLength(0);
+});
+
+it('should return a list of available items', async () => {
+  const { getAvailable } = createCaller(authContext({ db }));
+  const campaigns = await insertAll(db, 'campaigns', [
+    fakeCampaign(),
+    fakeCampaign(),
+  ]);
+
+  const items = await insertAll(db, 'items', [
+    fakeItem(),
+    fakeItem(),
+    fakeItem(),
+  ]);
+
+  await insertAll(
+    db,
+    'restrictedItems',
+    fakeRestrictedItem({ campaignId: campaigns[1].id, itemId: items[0].id })
+  );
+
+  const availableItems = await getAvailable(campaigns[0].id);
+
+  expect(availableItems).toHaveLength(2);
+});
+
+it('should return items in alphabetical order', async () => {
+  const { getAvailable } = createCaller(authContext({ db }));
+  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
+
+  const [itemOne, itemTwo] = await insertAll(db, 'items', [
+    fakeItem({ name: 'Cursed Sword' }),
+    fakeItem({ name: 'Arcane Staff' }),
+  ]);
+
+  const items = await getAvailable(campaign.id);
+
+  expect(items[0]).toMatchObject(itemTwo);
+  expect(items[1]).toMatchObject(itemOne);
+});

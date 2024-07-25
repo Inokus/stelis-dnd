@@ -1,40 +1,53 @@
 import { characterSchema } from '@server/entities/characters';
+import { idSchema } from '@server/entities/shared';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
 import provideRepos from '@server/trpc/provideRepos';
 import { charactersRepository } from '@server/repositories/charactersRepository';
 import { campaignsRepository } from '@server/repositories/campaignsRepository';
+import { z } from 'zod';
 
 export default authenticatedProcedure
   .use(provideRepos({ charactersRepository, campaignsRepository }))
 
   .input(
-    characterSchema.pick({
-      name: true,
-      userId: true,
-      campaignId: true,
+    z.object({
+      characterData: characterSchema.pick({
+        name: true,
+        campaignId: true,
+      }),
+      userId: idSchema.optional(),
     })
   )
-  .mutation(async ({ input: characterData, ctx: { repos, authUser } }) => {
-    if (!authUser.isAdmin) {
-      const userCampaigns = await repos.campaignsRepository.getAvailable(
-        characterData.userId
-      );
+  .mutation(
+    async ({ input: { characterData, userId }, ctx: { repos, authUser } }) => {
+      const finalUserId = authUser.isAdmin && userId ? userId : authUser.id;
 
-      if (
-        !userCampaigns.some(
-          (campaign) => campaign.id === characterData.campaignId
-        )
-      ) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'Access denied.',
+      // if user is not admin check if they have at least one character in that campaign already
+      if (!authUser.isAdmin) {
+        const userCampaigns =
+          await repos.campaignsRepository.getAvailable(finalUserId);
+
+        if (
+          !userCampaigns.some(
+            (campaign) => campaign.id === characterData.campaignId
+          )
+        ) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Access denied.',
+          });
+        } else {
+          return await repos.charactersRepository.create({
+            ...characterData,
+            userId: finalUserId,
+          });
+        }
+      } else {
+        return await repos.charactersRepository.create({
+          ...characterData,
+          userId: finalUserId,
         });
       }
     }
-
-    const characterCreated =
-      await repos.charactersRepository.create(characterData);
-
-    return characterCreated;
-  });
+  );

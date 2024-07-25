@@ -24,23 +24,24 @@ it('should throw an error if user is not authenticated', async () => {
 
   await expect(
     create({
-      name: 'Thia Galadon',
-      userId: user.id,
-      campaignId: campaign.id,
+      characterData: {
+        name: 'Thia Galadon',
+        campaignId: campaign.id,
+      },
     })
   ).rejects.toThrow(/unauthenticated/i);
 });
 
 it('should throw an error if user does not have any characters in that campaign', async () => {
-  const [user] = await insertAll(db, 'users', fakeUser());
   const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
   const { create } = createCaller(authContext({ db }));
 
   await expect(
     create({
-      name: 'Thia Galadon',
-      userId: user.id,
-      campaignId: campaign.id,
+      characterData: {
+        name: 'Thia Galadon',
+        campaignId: campaign.id,
+      },
     })
   ).rejects.toThrow(/denied/i);
 });
@@ -57,9 +58,10 @@ it('should create a persisted character if user had prior characters in that cam
   );
 
   const characterReturned = await create({
-    name: 'Thia Galadon',
-    userId: user.id,
-    campaignId: campaign.id,
+    characterData: {
+      name: 'Thia Galadon',
+      campaignId: campaign.id,
+    },
   });
 
   expect(characterReturned).toMatchObject({
@@ -85,9 +87,11 @@ it('should create a persisted character if user is admin', async () => {
   const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
 
   const characterReturned = await create({
-    name: 'Thia Galadon',
+    characterData: {
+      name: 'Thia Galadon',
+      campaignId: campaign.id,
+    },
     userId: user.id,
-    campaignId: campaign.id,
   });
 
   expect(characterReturned).toMatchObject({

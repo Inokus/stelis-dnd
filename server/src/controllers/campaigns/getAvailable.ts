@@ -9,7 +9,8 @@ export default authenticatedProcedure
     })
   )
   .query(async ({ ctx: { repos, authUser } }) => {
-    const campaigns = await repos.campaignsRepository.getAvailable(authUser.id);
-
-    return campaigns;
+    if (!authUser.isAdmin) {
+      return await repos.campaignsRepository.getAvailable(authUser.id);
+    }
+    return await repos.campaignsRepository.getAll();
   });
