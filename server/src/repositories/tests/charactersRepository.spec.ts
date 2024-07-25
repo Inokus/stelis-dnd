@@ -33,7 +33,7 @@ describe('create', () => {
 });
 
 describe('getAvailable', () => {
-  it('should get all characters that belongs to user', async () => {
+  it('should get all campaign characters that belongs to user', async () => {
     const [userOne, userTwo] = await insertAll(db, 'users', [
       fakeUser(),
       fakeUser(),
@@ -44,31 +44,27 @@ describe('getAvailable', () => {
       fakeCampaign(),
     ]);
 
-    const [characterOne, _, characterThree] = await insertAll(
-      db,
-      'characters',
-      [
-        fakeCharacter({
-          name: 'Thia Galadon',
-          userId: userOne.id,
-          campaignId: campaignOne.id,
-        }),
-        fakeCharacter({ userId: userTwo.id, campaignId: campaignTwo.id }),
-        fakeCharacter({
-          name: 'Baern Stormwind',
-          userId: userOne.id,
-          campaignId: campaignTwo.id,
-        }),
-      ]
+    const [characterOne, ..._] = await insertAll(db, 'characters', [
+      fakeCharacter({
+        name: 'Thia Galadon',
+        userId: userOne.id,
+        campaignId: campaignOne.id,
+      }),
+      fakeCharacter({ userId: userTwo.id, campaignId: campaignTwo.id }),
+      fakeCharacter({
+        name: 'Baern Stormwind',
+        userId: userOne.id,
+        campaignId: campaignTwo.id,
+      }),
+    ]);
+
+    const availableCharacters = await repository.getAvailable(
+      userOne.id,
+      campaignOne.id
     );
 
-    const availableCharacters = await repository.getAvailable(userOne.id);
-
-    expect(availableCharacters).toHaveLength(2);
+    expect(availableCharacters).toHaveLength(1);
     expect(availableCharacters).toEqual([
-      {
-        ...pick(characterThree, characterKeysPublic),
-      },
       {
         ...pick(characterOne, characterKeysPublic),
       },
@@ -77,7 +73,7 @@ describe('getAvailable', () => {
 });
 
 describe('getAll', () => {
-  it('should get all characters', async () => {
+  it('should get all campaign characters', async () => {
     const [userOne, userTwo] = await insertAll(db, 'users', [
       fakeUser(),
       fakeUser(),
@@ -100,8 +96,8 @@ describe('getAll', () => {
       }),
     ]);
 
-    const allCharacters = await repository.getAll();
+    const allCharacters = await repository.getAll(campaignTwo.id);
 
-    expect(allCharacters).toHaveLength(3);
+    expect(allCharacters).toHaveLength(2);
   });
 });

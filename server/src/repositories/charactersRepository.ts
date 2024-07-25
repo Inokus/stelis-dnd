@@ -16,19 +16,24 @@ export function charactersRepository(db: Database) {
         .executeTakeFirstOrThrow();
     },
 
-    async getAvailable(userId: number): Promise<CharacterPublic[]> {
+    async getAvailable(
+      userId: number,
+      campaignId: number
+    ): Promise<CharacterPublic[]> {
       return db
         .selectFrom('characters')
         .select(characterKeysPublic)
         .where('userId', '=', userId)
+        .where('campaignId', '=', campaignId)
         .orderBy('name')
         .execute();
     },
 
-    async getAll(): Promise<CharacterPublic[]> {
+    async getAll(campaignId: number): Promise<CharacterPublic[]> {
       return db
         .selectFrom('characters')
         .select(characterKeysPublic)
+        .where('campaignId', '=', campaignId)
         .orderBy('name')
         .execute();
     },
