@@ -22,12 +22,12 @@ export function itemsRepository(db: Database) {
         .execute();
     },
 
-    async getAvailable(itemIds: number[]): Promise<ItemPublic[]> {
-      if (itemIds.length > 0) {
+    async getAvailable(restrictedItemsIds: number[]): Promise<ItemPublic[]> {
+      if (restrictedItemsIds.length > 0) {
         return db
           .selectFrom('items')
           .select(itemKeysPublic)
-          .where('id', 'not in', itemIds)
+          .where('id', 'not in', restrictedItemsIds)
           .orderBy('name')
           .execute();
       }

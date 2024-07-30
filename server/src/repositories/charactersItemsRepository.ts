@@ -4,7 +4,11 @@ import {
   type CharacterItemPublic,
   characterItemKeysPublic,
 } from '@server/entities/charactersItems';
-import type { Insertable } from 'kysely';
+import {
+  type ItemWithQuantityPublic,
+  itemKeysPublic,
+} from '@server/entities/items';
+import type { Insertable, Updateable } from 'kysely';
 
 export function charactersItemsRepository(db: Database) {
   return {
@@ -18,12 +22,31 @@ export function charactersItemsRepository(db: Database) {
         .executeTakeFirstOrThrow();
     },
 
-    async getAll(characterId: number): Promise<CharacterItemPublic[]> {
+    async getAll(characterId: number): Promise<ItemWithQuantityPublic[]> {
       return db
-        .selectFrom('charactersItems')
-        .select(characterItemKeysPublic)
+        .selectFrom('charactersItems as c')
+        .innerJoin('items as i', 'i.id', 'c.itemId')
+        .select([
+          ...itemKeysPublic.map((key) => `i.${key}`),
+          'c.quantity',
+        ] as (keyof ItemWithQuantityPublic)[])
         .where('characterId', '=', characterId)
+        .orderBy('i.name')
         .execute();
+    },
+
+    async update(
+      characterId: number,
+      itemId: number,
+      updateData: Updateable<CharactersItems>
+    ): Promise<CharacterItemPublic> {
+      return db
+        .updateTable('charactersItems')
+        .set(updateData)
+        .where('characterId', '=', characterId)
+        .where('itemId', '=', itemId)
+        .returning(characterItemKeysPublic)
+        .executeTakeFirstOrThrow();
     },
 
     async remove(

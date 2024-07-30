@@ -15,15 +15,16 @@ import { charactersItemsRepository } from '../charactersItemsRepository';
 const db = await wrapInRollbacks(createTestDatabase());
 const repository = charactersItemsRepository(db);
 
+const [user] = await insertAll(db, 'users', fakeUser());
+const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
+const [character] = await insertAll(
+  db,
+  'characters',
+  fakeCharacter({ userId: user.id, campaignId: campaign.id })
+);
+
 describe('create', () => {
   it('should create a new character item', async () => {
-    const [user] = await insertAll(db, 'users', fakeUser());
-    const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
-    const [character] = await insertAll(
-      db,
-      'characters',
-      fakeCharacter({ userId: user.id, campaignId: campaign.id })
-    );
     const [item] = await insertAll(db, 'items', fakeItem());
     const characterItem = fakeCharacterItem({
       characterId: character.id,
@@ -33,27 +34,20 @@ describe('create', () => {
     const createdCharacterItem = await repository.create(characterItem);
 
     expect(createdCharacterItem).toEqual({
-      id: expect.any(Number),
       ...pick(characterItem, characterItemKeysPublic),
+      id: expect.any(Number),
     });
   });
 });
 
 describe('getAll', () => {
   it('should get all character items', async () => {
-    const [user] = await insertAll(db, 'users', fakeUser());
-    const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
-    const [character] = await insertAll(
-      db,
-      'characters',
-      fakeCharacter({ userId: user.id, campaignId: campaign.id })
-    );
     const items = await insertAll(db, 'items', [
       fakeItem(),
       fakeItem(),
       fakeItem(),
     ]);
-    const characterItems = await insertAll(db, 'charactersItems', [
+    await insertAll(db, 'charactersItems', [
       fakeCharacterItem({ characterId: character.id, itemId: items[0].id }),
       fakeCharacterItem({ characterId: character.id, itemId: items[1].id }),
       fakeCharacterItem({ characterId: character.id, itemId: items[2].id }),
@@ -65,15 +59,32 @@ describe('getAll', () => {
   });
 });
 
+describe('update', () => {
+  it('should update a character item', async () => {
+    const [item] = await insertAll(db, 'items', [fakeItem()]);
+    const [characterItem] = await insertAll(
+      db,
+      'charactersItems',
+      fakeCharacterItem({ characterId: character.id, itemId: item.id })
+    );
+
+    const updatedCharacterItem = await repository.update(
+      character.id,
+      item.id,
+      {
+        quantity: 1000000,
+      }
+    );
+
+    expect(updatedCharacterItem).toEqual({
+      ...pick(characterItem, characterItemKeysPublic),
+      quantity: 1000000,
+    });
+  });
+});
+
 describe('remove', () => {
   it('should remove an item', async () => {
-    const [user] = await insertAll(db, 'users', fakeUser());
-    const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
-    const [character] = await insertAll(
-      db,
-      'characters',
-      fakeCharacter({ userId: user.id, campaignId: campaign.id })
-    );
     const items = await insertAll(db, 'items', [
       fakeItem(),
       fakeItem(),

@@ -20,8 +20,8 @@ describe('create', () => {
     const createdCampaign = await repository.create(campaign);
 
     expect(createdCampaign).toEqual({
-      id: expect.any(Number),
       ...pick(campaign, campaignKeysPublic),
+      id: expect.any(Number),
       createdAt: expect.any(Date),
     });
   });
@@ -29,36 +29,29 @@ describe('create', () => {
 
 describe('getAvailable', () => {
   it('should get all campaigns that user has characters in', async () => {
-    const [userOne, userTwo] = await insertAll(db, 'users', [
-      fakeUser(),
-      fakeUser(),
-    ]);
+    const users = await insertAll(db, 'users', [fakeUser(), fakeUser()]);
 
-    const [campaignOne, campaignTwo, campaignThree] = await insertAll(
-      db,
-      'campaigns',
-      [
-        fakeCampaign({ name: 'Epic Quest of the Dragon' }),
-        fakeCampaign(),
-        fakeCampaign({ name: 'Lost Legend of the Ancients' }),
-      ]
-    );
+    const campaigns = await insertAll(db, 'campaigns', [
+      fakeCampaign({ name: 'Epic Quest of the Dragon' }),
+      fakeCampaign(),
+      fakeCampaign({ name: 'Lost Legend of the Ancients' }),
+    ]);
 
     await insertAll(db, 'characters', [
-      fakeCharacter({ userId: userOne.id, campaignId: campaignOne.id }),
-      fakeCharacter({ userId: userTwo.id, campaignId: campaignTwo.id }),
-      fakeCharacter({ userId: userOne.id, campaignId: campaignThree.id }),
+      fakeCharacter({ userId: users[0].id, campaignId: campaigns[0].id }),
+      fakeCharacter({ userId: users[1].id, campaignId: campaigns[1].id }),
+      fakeCharacter({ userId: users[0].id, campaignId: campaigns[2].id }),
     ]);
 
-    const availableCampaigns = await repository.getAvailable(userOne.id);
+    const availableCampaigns = await repository.getAvailable(users[0].id);
 
     expect(availableCampaigns).toHaveLength(2);
     expect(availableCampaigns).toEqual([
       {
-        ...pick(campaignOne, campaignKeysPublic),
+        ...pick(campaigns[0], campaignKeysPublic),
       },
       {
-        ...pick(campaignThree, campaignKeysPublic),
+        ...pick(campaigns[2], campaignKeysPublic),
       },
     ]);
   });

@@ -16,8 +16,8 @@ describe('create', () => {
     const createdUser = await repository.create(user);
 
     expect(createdUser).toEqual({
-      id: expect.any(Number),
       ...pick(user, userKeysPublic),
+      id: expect.any(Number),
       isAdmin: false,
       createdAt: expect.any(Date),
     });

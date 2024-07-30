@@ -33,25 +33,22 @@ describe('create', () => {
 
 describe('getAll', () => {
   it('should get all restricted items for campaign', async () => {
-    const [itemOne, itemTwo] = await insertAll(db, 'items', [
-      fakeItem(),
-      fakeItem(),
-    ]);
+    const items = await insertAll(db, 'items', [fakeItem(), fakeItem()]);
 
-    const [campaignOne, campaignTwo] = await insertAll(db, 'campaigns', [
+    const campaigns = await insertAll(db, 'campaigns', [
       fakeCampaign(),
       fakeCampaign(),
     ]);
 
     const restrictedItems = await insertAll(db, 'restrictedItems', [
-      fakeRestrictedItem({ itemId: itemOne.id, campaignId: campaignOne.id }),
+      fakeRestrictedItem({ itemId: items[0].id, campaignId: campaigns[0].id }),
       fakeRestrictedItem({
-        itemId: itemTwo.id,
-        campaignId: campaignTwo.id,
+        itemId: items[1].id,
+        campaignId: campaigns[1].id,
       }),
     ]);
 
-    const allRestrictedItems = await repository.getAll(campaignOne.id);
+    const allRestrictedItems = await repository.getAll(campaigns[0].id);
 
     expect(allRestrictedItems).toHaveLength(1);
     expect(allRestrictedItems[0]).toEqual(restrictedItems[1]);

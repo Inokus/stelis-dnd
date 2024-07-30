@@ -16,8 +16,8 @@ describe('create', () => {
     const createdItem = await repository.create(item);
 
     expect(createdItem).toEqual({
-      id: expect.any(Number),
       ...pick(item, itemKeysPublic),
+      id: expect.any(Number),
     });
   });
 });

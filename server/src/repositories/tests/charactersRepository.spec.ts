@@ -25,8 +25,8 @@ describe('create', () => {
     const createdCharacter = await repository.create(character);
 
     expect(createdCharacter).toEqual({
-      id: expect.any(Number),
       ...pick(character, characterKeysPublic),
+      id: expect.any(Number),
       createdAt: expect.any(Date),
     });
   });
@@ -34,39 +34,36 @@ describe('create', () => {
 
 describe('getAvailable', () => {
   it('should get all campaign characters that belongs to user', async () => {
-    const [userOne, userTwo] = await insertAll(db, 'users', [
-      fakeUser(),
-      fakeUser(),
-    ]);
+    const users = await insertAll(db, 'users', [fakeUser(), fakeUser()]);
 
-    const [campaignOne, campaignTwo] = await insertAll(db, 'campaigns', [
+    const campaigns = await insertAll(db, 'campaigns', [
       fakeCampaign(),
       fakeCampaign(),
     ]);
 
-    const [characterOne, ..._] = await insertAll(db, 'characters', [
+    const characters = await insertAll(db, 'characters', [
       fakeCharacter({
         name: 'Thia Galadon',
-        userId: userOne.id,
-        campaignId: campaignOne.id,
+        userId: users[0].id,
+        campaignId: campaigns[0].id,
       }),
-      fakeCharacter({ userId: userTwo.id, campaignId: campaignTwo.id }),
+      fakeCharacter({ userId: users[1].id, campaignId: campaigns[1].id }),
       fakeCharacter({
         name: 'Baern Stormwind',
-        userId: userOne.id,
-        campaignId: campaignTwo.id,
+        userId: users[0].id,
+        campaignId: campaigns[1].id,
       }),
     ]);
 
     const availableCharacters = await repository.getAvailable(
-      userOne.id,
-      campaignOne.id
+      users[0].id,
+      campaigns[0].id
     );
 
     expect(availableCharacters).toHaveLength(1);
     expect(availableCharacters).toEqual([
       {
-        ...pick(characterOne, characterKeysPublic),
+        ...pick(characters[0], characterKeysPublic),
       },
     ]);
   });
@@ -74,29 +71,26 @@ describe('getAvailable', () => {
 
 describe('getAll', () => {
   it('should get all campaign characters', async () => {
-    const [userOne, userTwo] = await insertAll(db, 'users', [
-      fakeUser(),
-      fakeUser(),
-    ]);
+    const users = await insertAll(db, 'users', [fakeUser(), fakeUser()]);
 
-    const [campaignOne, campaignTwo] = await insertAll(db, 'campaigns', [
+    const campaigns = await insertAll(db, 'campaigns', [
       fakeCampaign(),
       fakeCampaign(),
     ]);
 
     await insertAll(db, 'characters', [
       fakeCharacter({
-        userId: userOne.id,
-        campaignId: campaignOne.id,
+        userId: users[0].id,
+        campaignId: campaigns[0].id,
       }),
-      fakeCharacter({ userId: userTwo.id, campaignId: campaignTwo.id }),
+      fakeCharacter({ userId: users[1].id, campaignId: campaigns[1].id }),
       fakeCharacter({
-        userId: userOne.id,
-        campaignId: campaignTwo.id,
+        userId: users[0].id,
+        campaignId: campaigns[1].id,
       }),
     ]);
 
-    const allCharacters = await repository.getAll(campaignTwo.id);
+    const allCharacters = await repository.getAll(campaigns[1].id);
 
     expect(allCharacters).toHaveLength(2);
   });

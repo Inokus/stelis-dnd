@@ -4,7 +4,7 @@ import {
   type CharacterPublic,
   characterKeysPublic,
 } from '@server/entities/characters';
-import type { Insertable } from 'kysely';
+import type { Insertable, Updateable } from 'kysely';
 
 export function charactersRepository(db: Database) {
   return {
@@ -13,6 +13,14 @@ export function charactersRepository(db: Database) {
         .insertInto('characters')
         .values(character)
         .returning(characterKeysPublic)
+        .executeTakeFirstOrThrow();
+    },
+
+    async getById(characterId: number): Promise<CharacterPublic> {
+      return db
+        .selectFrom('characters')
+        .select(characterKeysPublic)
+        .where('id', '=', characterId)
         .executeTakeFirstOrThrow();
     },
 
@@ -36,6 +44,18 @@ export function charactersRepository(db: Database) {
         .where('campaignId', '=', campaignId)
         .orderBy('name')
         .execute();
+    },
+
+    async update(
+      id: number,
+      updateData: Updateable<Characters>
+    ): Promise<CharacterPublic> {
+      return db
+        .updateTable('characters')
+        .set(updateData)
+        .where('id', '=', id)
+        .returning(characterKeysPublic)
+        .executeTakeFirstOrThrow();
     },
   };
 }
