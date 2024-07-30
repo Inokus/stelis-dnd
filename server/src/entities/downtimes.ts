@@ -3,9 +3,24 @@ import type { Selectable } from 'kysely';
 import type { Downtimes } from '@server/database/types';
 import { createdAtSchema, idSchema } from './shared';
 
+export const downtimeTypes = [
+  'Carousing',
+  'Relaxation',
+  'Research',
+  'Training: Fighting Style',
+  'Training: Language/Tools',
+  'Training: Level Up',
+  'Training: Skill',
+  'Wandering',
+  'Wandering: Taking a New Path',
+  'Working',
+] as const;
+
 export const downtimeSchema = z.object({
   id: idSchema,
-  type: z.string(),
+  type: z.enum(downtimeTypes, {
+    errorMap: () => ({ message: 'Invalid downtime type' }),
+  }),
   days: z.number().int().positive(),
   description: z
     .string()
