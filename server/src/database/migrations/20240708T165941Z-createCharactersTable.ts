@@ -8,9 +8,11 @@ export async function up(db: Kysely<any>) {
     )
     .addColumn('name', 'text', (c) => c.notNull())
     .addColumn('downtime', 'integer', (c) => c.defaultTo(0).notNull())
-    .addColumn('user_id', 'integer', (c) => c.references('users.id').notNull())
+    .addColumn('user_id', 'integer', (c) =>
+      c.references('users.id').onDelete('cascade').notNull()
+    )
     .addColumn('campaign_id', 'integer', (c) =>
-      c.references('campaigns.id').notNull()
+      c.references('campaigns.id').onDelete('cascade').notNull()
     )
     .addColumn('created_at', 'timestamptz', (column) =>
       column.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()

@@ -10,7 +10,7 @@ export async function up(db: Kysely<any>) {
     .addColumn('days', 'integer', (c) => c.notNull())
     .addColumn('description', 'text', (c) => c.notNull())
     .addColumn('character_id', 'integer', (c) =>
-      c.references('characters.id').notNull()
+      c.references('characters.id').onDelete('cascade').notNull()
     )
     .addColumn('created_at', 'timestamptz', (column) =>
       column.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()

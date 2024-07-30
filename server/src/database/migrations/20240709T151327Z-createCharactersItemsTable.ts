@@ -8,9 +8,11 @@ export async function up(db: Kysely<any>) {
     )
     .addColumn('quantity', 'integer', (c) => c.notNull())
     .addColumn('character_id', 'integer', (c) =>
-      c.references('characters.id').notNull()
+      c.references('characters.id').onDelete('cascade').notNull()
     )
-    .addColumn('item_id', 'integer', (c) => c.references('items.id').notNull())
+    .addColumn('item_id', 'integer', (c) =>
+      c.references('items.id').onDelete('cascade').notNull()
+    )
     .execute();
 }
 

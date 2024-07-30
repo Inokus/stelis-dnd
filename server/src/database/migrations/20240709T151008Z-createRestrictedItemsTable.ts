@@ -6,9 +6,11 @@ export async function up(db: Kysely<any>) {
     .addColumn('id', 'integer', (c) =>
       c.primaryKey().generatedAlwaysAsIdentity()
     )
-    .addColumn('item_id', 'integer', (c) => c.references('items.id').notNull())
+    .addColumn('item_id', 'integer', (c) =>
+      c.references('items.id').onDelete('cascade').notNull()
+    )
     .addColumn('campaign_id', 'integer', (c) =>
-      c.references('campaigns.id').notNull()
+      c.references('campaigns.id').onDelete('cascade').notNull()
     )
     .execute();
 }
