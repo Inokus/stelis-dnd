@@ -14,6 +14,8 @@ import {
   generateCampaignName,
   generateCharacterName,
   generateItemName,
+  generateDowntimeType,
+  generateTransactionType,
 } from './random';
 import type { AuthUser } from '@server/entities/users';
 
@@ -104,11 +106,9 @@ export const fakeDowntime = <T extends Partial<Insertable<Downtimes>>>(
   overrides: T = {} as T
 ) =>
   ({
-    // THIS AINT RIGHT
-    // Perhaps change into list and pick one
-    type: random.string(),
+    type: generateDowntimeType(),
     days: random.integer({ min: 1, max: 60 }),
-    description: random.paragraph(),
+    description: random.paragraph({ sentences: 2 }),
     characterId: randomId(),
     ...overrides,
   }) satisfies Insertable<Downtimes>;
@@ -122,7 +122,7 @@ export const fakeItem = <T extends Partial<Insertable<Items>>>(
 ) =>
   ({
     name: generateItemName(),
-    description: random.paragraph(),
+    description: random.paragraph({ sentences: 2 }),
     value: random.integer({ min: 1, max: 5000 }),
     isCurrency: false,
     ...overrides,
@@ -151,9 +151,7 @@ export const fakeTransaction = <T extends Partial<Insertable<Transactions>>>(
   overrides: T = {} as T
 ) =>
   ({
-    // THIS AINT RIGHT
-    // Perhaps change into list and pick one
-    type: random.string(),
+    type: generateTransactionType(),
     quantity: random.integer({ min: 1, max: 60 }),
     value: random.integer({ min: 1, max: 5000 }),
     characterId: randomId(),
