@@ -1,11 +1,12 @@
 import { itemSchema } from '@server/entities/items';
 import { adminProcedure } from '@server/trpc/adminProcedure';
+import { TRPCError } from '@trpc/server';
 import provideRepos from '@server/trpc/provideRepos';
 import { itemsRepository } from '@server/repositories/itemsRepository';
+import { assertError } from '@server/utils/errors';
 
 export default adminProcedure
   .use(provideRepos({ itemsRepository }))
-
   .input(
     itemSchema.pick({
       id: true,
@@ -17,7 +18,20 @@ export default adminProcedure
   .mutation(async ({ input: itemData, ctx: { repos } }) => {
     const { id, ...updateData } = itemData;
 
-    const itemUpdated = await repos.itemsRepository.update(id, updateData);
+    try {
+      const itemUpdated = await repos.itemsRepository.update(id, updateData);
+      return itemUpdated;
+    } catch (error: unknown) {
+      assertError(error);
 
-    return itemUpdated;
+      if (error.message.includes('items_name_key')) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Item with this name already exists.',
+          cause: error,
+        });
+      }
+
+      throw error;
+    }
   });

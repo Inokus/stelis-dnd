@@ -17,15 +17,16 @@ import charactersRouter from '..';
 const createCaller = createCallerFactory(charactersRouter);
 const db = await wrapInRollbacks(createTestDatabase());
 
+const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
+const character = fakeCharacter();
+
 it('should throw an error if user is not authenticated', async () => {
-  const [user] = await insertAll(db, 'users', fakeUser());
-  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
   const { create } = createCaller(requestContext({ db }));
 
   await expect(
     create({
       characterData: {
-        name: 'Thia Galadon',
+        name: character.name,
         campaignId: campaign.id,
       },
     })
@@ -33,13 +34,12 @@ it('should throw an error if user is not authenticated', async () => {
 });
 
 it('should throw an error if user does not have any characters in that campaign', async () => {
-  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
   const { create } = createCaller(authContext({ db }));
 
   await expect(
     create({
       characterData: {
-        name: 'Thia Galadon',
+        name: character.name,
         campaignId: campaign.id,
       },
     })
@@ -50,7 +50,6 @@ it('should create a persisted character if user had prior characters in that cam
   const [user] = await insertAll(db, 'users', fakeUser());
   const { create } = createCaller(requestContext({ db, authUser: user }));
 
-  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
   await insertAll(
     db,
     'characters',
@@ -59,14 +58,14 @@ it('should create a persisted character if user had prior characters in that cam
 
   const characterReturned = await create({
     characterData: {
-      name: 'Thia Galadon',
+      name: character.name,
       campaignId: campaign.id,
     },
   });
 
   expect(characterReturned).toMatchObject({
     id: expect.any(Number),
-    name: 'Thia Galadon',
+    name: character.name,
     downtime: expect.any(Number),
     userId: user.id,
     campaignId: campaign.id,
@@ -84,11 +83,9 @@ it('should create a persisted character if user is admin', async () => {
   const [user] = await insertAll(db, 'users', fakeUser());
   const { create } = createCaller(adminContext({ db }));
 
-  const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
-
   const characterReturned = await create({
     characterData: {
-      name: 'Thia Galadon',
+      name: character.name,
       campaignId: campaign.id,
     },
     userId: user.id,
@@ -96,7 +93,7 @@ it('should create a persisted character if user is admin', async () => {
 
   expect(characterReturned).toMatchObject({
     id: expect.any(Number),
-    name: 'Thia Galadon',
+    name: character.name,
     downtime: expect.any(Number),
     userId: user.id,
     campaignId: campaign.id,

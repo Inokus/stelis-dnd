@@ -7,13 +7,11 @@ import {
 import { createTestDatabase } from '@server/tests/utils/database';
 import { createCallerFactory } from '@server/trpc';
 import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { clearTables, insertAll } from '@server/tests/utils/records';
+import { insertAll } from '@server/tests/utils/records';
 import itemsRouter from '..';
 
 const createCaller = createCallerFactory(itemsRouter);
 const db = await wrapInRollbacks(createTestDatabase());
-
-await clearTables(db, ['items']);
 
 it('should throw an error if user is not authenticated', async () => {
   const { getAvailable } = createCaller(requestContext({ db }));
@@ -57,13 +55,13 @@ it('should return items in alphabetical order', async () => {
   const { getAvailable } = createCaller(authContext({ db }));
   const [campaign] = await insertAll(db, 'campaigns', fakeCampaign());
 
-  const [itemOne, itemTwo] = await insertAll(db, 'items', [
+  const items = await insertAll(db, 'items', [
     fakeItem({ name: 'Cursed Sword' }),
     fakeItem({ name: 'Arcane Staff' }),
   ]);
 
-  const items = await getAvailable(campaign.id);
+  const availableItems = await getAvailable(campaign.id);
 
-  expect(items[0]).toMatchObject(itemTwo);
-  expect(items[1]).toMatchObject(itemOne);
+  expect(availableItems[0]).toMatchObject(items[1]);
+  expect(availableItems[1]).toMatchObject(items[0]);
 });

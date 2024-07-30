@@ -7,13 +7,11 @@ import {
 import { createTestDatabase } from '@server/tests/utils/database';
 import { createCallerFactory } from '@server/trpc';
 import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { clearTables, insertAll } from '@server/tests/utils/records';
+import { insertAll } from '@server/tests/utils/records';
 import charactersRouter from '..';
 
 const createCaller = createCallerFactory(charactersRouter);
 const db = await wrapInRollbacks(createTestDatabase());
-
-await clearTables(db, ['characters']);
 
 it('should throw an error if user is not authenticated', async () => {
   const { getAvailable } = createCaller(requestContext({ db }));
@@ -54,7 +52,7 @@ it('should return characters in alphabetical order', async () => {
   const { getAvailable } = createCaller(requestContext({ db, authUser: user }));
 
   const [campaign] = await insertAll(db, 'campaigns', [fakeCampaign()]);
-  const [characterOne, characterTwo] = await insertAll(db, 'characters', [
+  const characters = await insertAll(db, 'characters', [
     fakeCharacter({
       name: 'Thia Galadon',
       userId: user.id,
@@ -67,9 +65,9 @@ it('should return characters in alphabetical order', async () => {
     }),
   ]);
 
-  const characters = await getAvailable(campaign.id);
+  const availableCharacters = await getAvailable(campaign.id);
 
   expect(characters).toHaveLength(2);
-  expect(characters[0]).toMatchObject(characterTwo);
-  expect(characters[1]).toMatchObject(characterOne);
+  expect(availableCharacters[0]).toMatchObject(characters[1]);
+  expect(availableCharacters[1]).toMatchObject(characters[0]);
 });

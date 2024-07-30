@@ -13,7 +13,5 @@ export default adminProcedure
     })
   )
   .mutation(async ({ input: { id }, ctx: { repos } }) => {
-    const itemRemoved = await repos.itemsRepository.remove(id);
-
-    return itemRemoved;
+    return await repos.itemsRepository.remove(id);
   });

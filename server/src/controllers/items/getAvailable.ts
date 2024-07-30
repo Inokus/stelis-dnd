@@ -4,6 +4,7 @@ import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import provideRepos from '@server/trpc/provideRepos';
 import withTransaction from '@server/trpc/withTransaction';
 import { idSchema } from '@server/entities/shared';
+import { assertError } from '@server/utils/errors';
 
 export default authenticatedProcedure
   .use(withTransaction())
@@ -22,8 +23,9 @@ export default authenticatedProcedure
       const itemIds = restrictedItems.map((item) => item.itemId);
 
       return await repos.itemsRepository.getAvailable(itemIds);
-    } catch (error) {
-      // if any operation fails, the transaction will automatically roll back
+    } catch (error: unknown) {
+      assertError(error);
+
       throw error;
     }
   });

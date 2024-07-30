@@ -1,17 +1,15 @@
 import { idSchema } from '@server/entities/shared';
-import { charactersItemsRepository } from '@server/repositories/charactersItemsRepository';
-import { itemsRepository } from '@server/repositories/itemsRepository';
+import { downtimesRepository } from '@server/repositories/downtimesRepository';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import provideRepos from '@server/trpc/provideRepos';
-import withTransaction from '@server/trpc/withTransaction';
 
 export default authenticatedProcedure
   .use(
     provideRepos({
-      charactersItemsRepository,
+      downtimesRepository,
     })
   )
   .input(idSchema)
   .query(async ({ input: characterId, ctx: { repos } }) => {
-    return await repos.charactersItemsRepository.getAll(characterId);
+    return await repos.downtimesRepository.getAll(characterId);
   });

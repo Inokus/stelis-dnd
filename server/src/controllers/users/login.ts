@@ -28,7 +28,7 @@ export default publicProcedure
     if (!user) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
-        message: 'We could not find an account with this username',
+        message: 'We could not find an account with this username.',
       });
     }
 
