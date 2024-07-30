@@ -25,3 +25,5 @@ export type ItemPublic = Pick<
   Selectable<Items>,
   (typeof itemKeysPublic)[number]
 >;
+
+export type ItemWithQuantityPublic = ItemPublic & { quantity: number };
