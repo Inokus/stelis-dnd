@@ -11,7 +11,6 @@ import { createCallerFactory } from '@server/trpc';
 import { wrapInRollbacks } from '@server/tests/utils/transactions';
 import { insertAll } from '@server/tests/utils/records';
 import charactersRouter from '..';
-import getTransactions from '../getTransactions';
 
 const createCaller = createCallerFactory(charactersRouter);
 const db = await wrapInRollbacks(createTestDatabase());

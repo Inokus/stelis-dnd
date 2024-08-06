@@ -38,6 +38,7 @@ export default authenticatedProcedure
           await repos.charactersItemsRepository.update(characterId, itemId, {
             quantity: existingItem.quantity + quantity,
           });
+
           const transactionCreated = await repos.transactionsRepository.create({
             type,
             value: existingItem.value * quantity,
@@ -65,6 +66,7 @@ export default authenticatedProcedure
           characterId,
           quantity,
         });
+
         const transactionCreated = await repos.transactionsRepository.create({
           type,
           value: newItem.value * quantity,
@@ -99,6 +101,7 @@ export default authenticatedProcedure
         await repos.charactersItemsRepository.update(characterId, itemId, {
           quantity: existingItem.quantity - quantity,
         });
+
         const transactionCreated = await repos.transactionsRepository.create({
           type,
           value: existingItem.value * quantity,
@@ -120,6 +123,7 @@ export default authenticatedProcedure
       }
 
       await repos.charactersItemsRepository.remove(characterId, itemId);
+
       const transactionCreated = await repos.transactionsRepository.create({
         type,
         value: existingItem.value * quantity,

@@ -8,6 +8,7 @@ import type {
   Transactions,
   Users,
 } from '@server/database/types';
+import type { AuthUser } from '@server/entities/users';
 import type { Insertable } from 'kysely';
 import {
   random,
@@ -17,7 +18,6 @@ import {
   generateDowntimeType,
   generateTransactionType,
 } from './random';
-import type { AuthUser } from '@server/entities/users';
 
 const randomId = () =>
   random.integer({

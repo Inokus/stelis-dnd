@@ -15,5 +15,10 @@ export default authenticatedProcedure
   .mutation(async ({ input: characterData, ctx: { repos } }) => {
     const { id, ...updateData } = characterData;
 
-    return await repos.charactersRepository.update(id, updateData);
+    const characterUpdated = await repos.charactersRepository.update(
+      id,
+      updateData
+    );
+
+    return characterUpdated;
   });

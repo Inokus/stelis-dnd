@@ -20,6 +20,7 @@ export default adminProcedure
 
     try {
       const itemUpdated = await repos.itemsRepository.update(id, updateData);
+
       return itemUpdated;
     } catch (error: unknown) {
       assertError(error);

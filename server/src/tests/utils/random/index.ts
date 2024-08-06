@@ -1,4 +1,7 @@
 import { Chance } from 'chance';
+import config from '@server/config';
+import { transactionTypes } from '@server/entities/transactions';
+import { downtimeTypes } from '@server/entities/downtimes';
 import {
   characterFirstNames,
   characterLastNames,
@@ -8,9 +11,6 @@ import {
   itemAdjectives,
   itemNames,
 } from './randomData';
-import { downtimeTypes } from '@server/entities/downtimes';
-import { transactionTypes } from '@server/entities/transactions';
-import config from '@server/config';
 
 export const random = config.isCi ? Chance(1) : Chance();
 

@@ -44,6 +44,7 @@ export default authenticatedProcedure
           downtime: newDowntime,
         }
       );
+
       const downtimeCreated = await repos.downtimesRepository.create({
         type,
         days,
@@ -53,7 +54,7 @@ export default authenticatedProcedure
 
       return {
         newDowntime: characterUpdated.downtime,
-        downtimeCreated: downtimeCreated,
+        downtimeCreated,
       };
     } catch (error: unknown) {
       assertError(error);

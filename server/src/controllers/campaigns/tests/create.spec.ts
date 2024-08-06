@@ -9,8 +9,8 @@ import { createCallerFactory } from '@server/trpc';
 import { wrapInRollbacks } from '@server/tests/utils/transactions';
 import { selectAll } from '@server/tests/utils/records';
 import { pick } from 'lodash-es';
-import campaignsRouter from '..';
 import { campaignKeysPublic } from '@server/entities/campaigns';
+import campaignsRouter from '..';
 
 const createCaller = createCallerFactory(campaignsRouter);
 const db = await wrapInRollbacks(createTestDatabase());

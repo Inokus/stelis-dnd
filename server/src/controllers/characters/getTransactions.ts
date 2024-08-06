@@ -11,5 +11,7 @@ export default authenticatedProcedure
   )
   .input(idSchema)
   .query(async ({ input: characterId, ctx: { repos } }) => {
-    return await repos.transactionsRepository.getAll(characterId);
+    const transactions = await repos.transactionsRepository.getAll(characterId);
+
+    return transactions;
   });

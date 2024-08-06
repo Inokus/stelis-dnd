@@ -15,7 +15,10 @@ export default adminProcedure
   )
   .mutation(async ({ input: campaignData, ctx: { repos } }) => {
     try {
-      return await repos.campaignsRepository.create(campaignData);
+      const campaignCreated =
+        await repos.campaignsRepository.create(campaignData);
+
+      return campaignCreated;
     } catch (error: unknown) {
       assertError(error);
 

@@ -27,6 +27,7 @@ export default adminProcedure
   .mutation(async ({ input: { itemData, campaignId }, ctx: { repos } }) => {
     try {
       const itemCreated = await repos.itemsRepository.create(itemData);
+
       if (campaignId) {
         await repos.restrictedItemsRepository.create({
           itemId: itemCreated.id,

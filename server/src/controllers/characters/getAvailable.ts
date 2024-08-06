@@ -12,10 +12,15 @@ export default authenticatedProcedure
   .input(idSchema)
   .query(async ({ input: campaignId, ctx: { repos, authUser } }) => {
     if (!authUser.isAdmin) {
-      return await repos.charactersRepository.getAvailable(
+      const characters = await repos.charactersRepository.getAvailable(
         authUser.id,
         campaignId
       );
+
+      return characters;
     }
-    return await repos.charactersRepository.getAll(campaignId);
+
+    const characters = await repos.charactersRepository.getAll(campaignId);
+
+    return characters;
   });

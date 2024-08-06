@@ -11,5 +11,7 @@ export default authenticatedProcedure
   )
   .input(idSchema)
   .query(async ({ input: characterId, ctx: { repos } }) => {
-    return await repos.downtimesRepository.getAll(characterId);
+    const downtimes = await repos.downtimesRepository.getAll(characterId);
+
+    return downtimes;
   });

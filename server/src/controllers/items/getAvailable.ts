@@ -22,7 +22,9 @@ export default authenticatedProcedure
 
       const itemIds = restrictedItems.map((item) => item.itemId);
 
-      return await repos.itemsRepository.getAvailable(itemIds);
+      const items = await repos.itemsRepository.getAvailable(itemIds);
+
+      return items;
     } catch (error: unknown) {
       assertError(error);
 

@@ -25,11 +25,11 @@ export default authenticatedProcedure
 
       // if user is not admin check if they have at least one character in that campaign already
       if (!authUser.isAdmin) {
-        const userCampaigns =
+        const campaigns =
           await repos.campaignsRepository.getAvailable(finalUserId);
 
         if (
-          !userCampaigns.some(
+          !campaigns.some(
             (campaign) => campaign.id === characterData.campaignId
           )
         ) {
@@ -38,16 +38,20 @@ export default authenticatedProcedure
             message: 'Access denied.',
           });
         } else {
-          return await repos.charactersRepository.create({
+          const characterCreated = await repos.charactersRepository.create({
             ...characterData,
             userId: finalUserId,
           });
+
+          return characterCreated;
         }
       } else {
-        return await repos.charactersRepository.create({
+        const characterCreated = await repos.charactersRepository.create({
           ...characterData,
           userId: finalUserId,
         });
+
+        return characterCreated;
       }
     }
   );
