@@ -1,4 +1,4 @@
-import { authContext, requestContext } from '@server/tests/utils/context';
+import { authContext, requestContext } from '@tests/utils/context';
 import { createCallerFactory, router } from '..';
 import { authenticatedProcedure } from '.';
 

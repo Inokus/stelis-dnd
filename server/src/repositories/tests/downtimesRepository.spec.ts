@@ -1,12 +1,12 @@
-import { createTestDatabase } from '@server/tests/utils/database';
+import { createTestDatabase } from '@tests/utils/database';
 import {
   fakeDowntime,
   fakeUser,
   fakeCampaign,
   fakeCharacter,
-} from '@server/tests/utils/fakes';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll } from '@server/tests/utils/records';
+} from '@tests/utils/fakes';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll } from '@tests/utils/records';
 import { pick } from 'lodash-es';
 import { downtimeKeysPublic } from '@server/entities/downtimes';
 import { downtimesRepository } from '../downtimesRepository';

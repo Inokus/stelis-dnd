@@ -1,13 +1,9 @@
-import { authContext, requestContext } from '@server/tests/utils/context';
-import {
-  fakeCampaign,
-  fakeCharacter,
-  fakeUser,
-} from '@server/tests/utils/fakes';
-import { createTestDatabase } from '@server/tests/utils/database';
+import { authContext, requestContext } from '@tests/utils/context';
+import { fakeCampaign, fakeCharacter, fakeUser } from '@tests/utils/fakes';
+import { createTestDatabase } from '@tests/utils/database';
 import { createCallerFactory } from '@server/trpc';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll } from '@server/tests/utils/records';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll } from '@tests/utils/records';
 import charactersRouter from '..';
 
 const createCaller = createCallerFactory(charactersRouter);

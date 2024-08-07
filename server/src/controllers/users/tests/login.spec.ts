@@ -1,8 +1,8 @@
 import { createCallerFactory } from '@server/trpc';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { createTestDatabase } from '@server/tests/utils/database';
-import { insertAll } from '@server/tests/utils/records';
-import { fakeUser } from '@server/tests/utils/fakes';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { createTestDatabase } from '@tests/utils/database';
+import { insertAll } from '@tests/utils/records';
+import { fakeUser } from '@tests/utils/fakes';
 import userRouter from '..';
 
 const createCaller = createCallerFactory(userRouter);

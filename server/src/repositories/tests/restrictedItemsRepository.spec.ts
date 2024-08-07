@@ -1,11 +1,7 @@
-import { createTestDatabase } from '@server/tests/utils/database';
-import {
-  fakeItem,
-  fakeCampaign,
-  fakeRestrictedItem,
-} from '@server/tests/utils/fakes';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll, selectAll } from '@server/tests/utils/records';
+import { createTestDatabase } from '@tests/utils/database';
+import { fakeItem, fakeCampaign, fakeRestrictedItem } from '@tests/utils/fakes';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll, selectAll } from '@tests/utils/records';
 import { pick } from 'lodash-es';
 import { restrictedItemKeysPublic } from '@server/entities/restrictedItems';
 import { restrictedItemsRepository } from '../restrictedItemsRepository';

@@ -1,9 +1,9 @@
-import { createTestDatabase } from '@server/tests/utils/database';
-import { fakeUser } from '@server/tests/utils/fakes';
+import { createTestDatabase } from '@tests/utils/database';
+import { fakeUser } from '@tests/utils/fakes';
 import { createCallerFactory } from '@server/trpc';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { selectAll } from '@server/tests/utils/records';
-import { random } from '@server/tests/utils/random';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { selectAll } from '@tests/utils/records';
+import { random } from '@tests/utils/random';
 import userRouter from '..';
 
 const db = await wrapInRollbacks(createTestDatabase());

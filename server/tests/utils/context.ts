@@ -1,4 +1,4 @@
-import { fakeAuthUser, fakeAdminUser } from '@server/tests/utils/fakes';
+import { fakeAuthUser, fakeAdminUser } from '@tests/utils/fakes';
 import { authUserSchema, type AuthUser } from '@server/entities/users';
 import type { Context, ContextMinimal } from '@server/trpc';
 

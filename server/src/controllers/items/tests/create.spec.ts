@@ -2,12 +2,12 @@ import {
   authContext,
   adminContext,
   requestContext,
-} from '@server/tests/utils/context';
-import { fakeItem, fakeCampaign } from '@server/tests/utils/fakes';
-import { createTestDatabase } from '@server/tests/utils/database';
+} from '@tests/utils/context';
+import { fakeItem, fakeCampaign } from '@tests/utils/fakes';
+import { createTestDatabase } from '@tests/utils/database';
 import { createCallerFactory } from '@server/trpc';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll, selectAll } from '@server/tests/utils/records';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll, selectAll } from '@tests/utils/records';
 import itemsRouter from '..';
 
 const createCaller = createCallerFactory(itemsRouter);

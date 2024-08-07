@@ -1,11 +1,7 @@
-import { createTestDatabase } from '@server/tests/utils/database';
-import {
-  fakeCampaign,
-  fakeUser,
-  fakeCharacter,
-} from '@server/tests/utils/fakes';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll } from '@server/tests/utils/records';
+import { createTestDatabase } from '@tests/utils/database';
+import { fakeCampaign, fakeUser, fakeCharacter } from '@tests/utils/fakes';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll } from '@tests/utils/records';
 import { pick } from 'lodash-es';
 import { characterKeysPublic } from '@server/entities/characters';
 import { charactersRepository } from '../charactersRepository';

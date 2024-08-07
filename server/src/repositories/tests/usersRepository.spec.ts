@@ -1,7 +1,7 @@
-import { createTestDatabase } from '@server/tests/utils/database';
-import { fakeUser } from '@server/tests/utils/fakes';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll } from '@server/tests/utils/records';
+import { createTestDatabase } from '@tests/utils/database';
+import { fakeUser } from '@tests/utils/fakes';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll } from '@tests/utils/records';
 import { pick } from 'lodash-es';
 import { userKeysPublic } from '@server/entities/users';
 import { usersRepository } from '../usersRepository';

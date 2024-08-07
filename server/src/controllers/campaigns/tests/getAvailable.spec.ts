@@ -2,16 +2,12 @@ import {
   authContext,
   adminContext,
   requestContext,
-} from '@server/tests/utils/context';
-import {
-  fakeCampaign,
-  fakeCharacter,
-  fakeUser,
-} from '@server/tests/utils/fakes';
-import { createTestDatabase } from '@server/tests/utils/database';
+} from '@tests/utils/context';
+import { fakeCampaign, fakeCharacter, fakeUser } from '@tests/utils/fakes';
+import { createTestDatabase } from '@tests/utils/database';
 import { createCallerFactory } from '@server/trpc';
-import { wrapInRollbacks } from '@server/tests/utils/transactions';
-import { insertAll } from '@server/tests/utils/records';
+import { wrapInRollbacks } from '@tests/utils/transactions';
+import { insertAll } from '@tests/utils/records';
 import { pick } from 'lodash-es';
 import { campaignKeysPublic } from '@server/entities/campaigns';
 import campaignsRouter from '..';
