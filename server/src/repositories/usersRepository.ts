@@ -17,6 +17,15 @@ export function usersRepository(db: Database) {
         .executeTakeFirstOrThrow();
     },
 
+    async makeAdmin(userId: number) {
+      return db
+        .updateTable('users')
+        .set('isAdmin', true)
+        .where('id', '=', userId)
+        .returning(userKeysPublic)
+        .executeTakeFirstOrThrow();
+    },
+
     async findByUsername(
       username: string
     ): Promise<Selectable<Users> | undefined> {
@@ -25,6 +34,10 @@ export function usersRepository(db: Database) {
         .select(userKeysAll)
         .where('username', '=', username)
         .executeTakeFirst();
+    },
+
+    async getAll(): Promise<UserPublic[]> {
+      return db.selectFrom('users').select(userKeysPublic).execute();
     },
   };
 }
