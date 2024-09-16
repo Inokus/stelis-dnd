@@ -11,7 +11,7 @@ export const itemSchema = z.object({
     .max(30, 'Item name must be at most 30 characters long'),
   description: z
     .string()
-    .min(1, 'Item description must be at least 1 character long')
+    .min(3, 'Item description must be at least 3 characters long')
     .max(5000, 'Item description must be at most 5000 characters long'),
   value: z.number().int().positive(),
   isCurrency: z.boolean(),
