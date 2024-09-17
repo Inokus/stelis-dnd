@@ -111,7 +111,7 @@ onMounted(async () => {
       </Tabs>
     </div>
     <div class="col-span-1 row-span-1 flex h-full flex-col overflow-hidden" v-if="width >= 1280">
-      <div class="flex items-center justify-between border-b border-slate-200 font-bold">
+      <div class="p-tablist-tab-list flex items-center justify-between font-bold">
         <span class="px-4 py-4 font-bold">Shop</span>
         <Button
           label="Add new item"
