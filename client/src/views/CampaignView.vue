@@ -89,19 +89,19 @@ onMounted(async () => {
               v-if="userStore.authUser?.isAdmin"
           /></Tab>
         </TabList>
-        <TabPanels class="flex-1 overflow-auto">
+        <TabPanels class="flex-1 overflow-auto p-0">
           <TabPanel value="0" class="h-full">
             <InventoryTab v-if="characterStore.selectedCharacter" />
-            <p v-else>No character selected.</p>
+            <p class="p-4" v-else>No character selected.</p>
           </TabPanel>
           <TabPanel value="1" class="h-full">
             <DowntimesTab ref="downtimesTabRef" v-if="characterStore.selectedCharacter" />
-            <p v-else>No character selected.</p>
+            <p class="p-4" v-else>No character selected.</p>
           </TabPanel>
           <TabPanel value="2" class="h-full">
             <TransactionsTab v-if="characterStore.selectedCharacter" />
 
-            <p v-else>No character selected.</p>
+            <p class="p-4" v-else>No character selected.</p>
           </TabPanel>
           <TabPanel value="3" class="h-full" v-if="width < 1280">
             <Skeleton class="h-full" v-if="isLoading"></Skeleton>
@@ -116,12 +116,13 @@ onMounted(async () => {
         <Button
           label="Add new item"
           icon="pi pi-plus"
+          class="mr-4"
           @click="shopTabRef?.openDialog"
           v-if="userStore.authUser?.isAdmin"
         />
       </div>
       <Skeleton class="h-full" v-if="isLoading"></Skeleton>
-      <div class="overflow-auto p-3.5" v-else>
+      <div class="overflow-auto" v-else>
         <ShopTab ref="shopTabRef" />
       </div>
     </div>

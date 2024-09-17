@@ -158,7 +158,7 @@ const sellItem = async () => {
             @click="openDialog(slotProps.data)" /></template
       ></Column>
     </DataTable>
-    <p v-else>Inventory is currently empty.</p>
+    <p class="p-4" v-else>Inventory is currently empty.</p>
   </template>
 
   <Dialog

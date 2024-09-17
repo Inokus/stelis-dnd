@@ -54,6 +54,6 @@ watch(
       <Column field="quantity" header="Quantity"></Column>
       <Column field="createdAt" header="Date"></Column>
     </DataTable>
-    <p v-else>No transactions to display.</p>
+    <p class="p-4" v-else>No transactions to display.</p>
   </template>
 </template>

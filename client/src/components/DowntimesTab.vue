@@ -157,7 +157,7 @@ defineExpose({
       <Column field="days" header="Days"></Column>
       <Column field="createdAt" header="Date"></Column>
     </DataTable>
-    <p v-else>No downtimes to display.</p>
+    <p class="p-4" v-else>No downtimes to display.</p>
   </template>
 
   <Dialog
