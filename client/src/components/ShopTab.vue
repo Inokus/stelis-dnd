@@ -149,25 +149,26 @@ const createItem = async () => {
   const valid = await v$.value.$validate();
   if (valid) {
     isDialogLoading.value = true;
+    const inputDataCopy = JSON.parse(JSON.stringify(inputData.value));
     try {
       switch (selectedCurrency.value) {
         case 'sp':
-          inputData.value.itemData.value *= 10;
+          inputDataCopy.itemData.value *= 10;
           break;
         case 'gp':
-          inputData.value.itemData.value *= 100;
+          inputDataCopy.itemData.value *= 100;
           break;
         case 'pp':
-          inputData.value.itemData.value *= 1000;
+          inputDataCopy.itemData.value *= 1000;
           break;
         default:
           break;
       }
-      await itemStore.createItem(inputData.value);
+      await itemStore.createItem(inputDataCopy);
       toast.add({
         severity: 'success',
         summary: 'Success',
-        detail: `Item (${inputData.value.itemData.name}) has been created`,
+        detail: `Item (${inputDataCopy.itemData.name}) has been created`,
         life: 3000,
       });
       closeDialog();
