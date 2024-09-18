@@ -48,7 +48,7 @@ const characterSelectList = computed(() => {
 const otherUsers = computed(() => {
   return userStore.users
     .filter((user) => user.id !== userStore.authUser.id)
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => a.username.localeCompare(b.username));
 });
 
 watch(selectedCharacter, (newValue, oldValue) => {
