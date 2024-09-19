@@ -39,4 +39,7 @@ declare module 'vue' {
     ToggleButton: typeof import('primevue/togglebutton')['default']
     TransactionsTab: typeof import('./src/components/TransactionsTab.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    Tooltip: typeof import('primevue/tooltip')['default']
+  }
 }

@@ -144,7 +144,13 @@ const sellItem = async () => {
       size="small"
       v-if="selectedCharacterInventory.length > 0"
     >
-      <Column field="name" header="Name"></Column>
+      <Column field="name" header="Name">
+        <template #body="slotProps">
+          <span v-tooltip="{ value: slotProps.data.description, autoHide: false }">
+            {{ slotProps.data.name }}
+          </span>
+        </template>
+      </Column>
       <Column field="convertedValue" header="Value"></Column>
       <Column field="quantity" header="Quantity"></Column>
       <Column

@@ -153,7 +153,13 @@ defineExpose({
       size="small"
       v-if="selectedCharacterDowntimes.length > 0"
     >
-      <Column field="type" header="Type"></Column>
+      <Column field="type" header="Type">
+        <template #body="slotProps">
+          <span v-tooltip="{ value: slotProps.data.description, autoHide: false }">
+            {{ slotProps.data.type }}
+          </span>
+        </template>
+      </Column>
       <Column field="days" header="Days"></Column>
       <Column field="createdAt" header="Date"></Column>
     </DataTable>

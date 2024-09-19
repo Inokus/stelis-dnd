@@ -193,7 +193,13 @@ defineExpose({
 
 <template>
   <DataTable :value="shopItems" sortField="name" :sortOrder="1" size="small">
-    <Column field="name" header="Name" class="min-w-16 max-w-20 sm:max-w-32"></Column>
+    <Column field="name" header="Name">
+      <template #body="slotProps">
+        <span v-tooltip="{ value: slotProps.data.description, autoHide: false }">
+          {{ slotProps.data.name }}
+        </span>
+      </template>
+    </Column>
     <Column field="convertedValue" header="Value"></Column>
     <Column field="quantity" header="Quantity"
       ><template #body="slotProps">
